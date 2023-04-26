@@ -5,14 +5,14 @@
 
 <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
     <div class="card p-5 shadow-lg rounded-3 animate__animated animate__fadeInUp" style="max-width: 500px;">
-        <h1 class="fw-bold text-center mb-4" style="font-family: 'Montserrat', sans-serif; font-size: 2rem;">Select QR code image</h1>
+        <h1 class="fw-bold text-center mb-4" style="font-family: 'Montserrat', sans-serif; font-size: 2rem;">Select QR code</h1>
         <form method="post" enctype="multipart/form-data">
             <div class="d-flex justify-content-center flex-column">
 
                 <input type="file" name="FormFile" hidden="" id="getFile" accept="image/png, image/jpeg">
                 <div class="d-flex justify-content-center">
                     <a style="background-color:transparent;border:hidden; margin:0;padding:0;padding-left:0.5rem;display:inline;" onclick="document.getElementById('getFile').click()">
-                    <div href="/QR" class="btn btn-lg btn-outline-primary rounded-pill py-3" style="font-size: 0.88rem;"><img src="~/images/qr-code-icon.png" alt="QR code icon" class="me-2" width="24">Choose</div>
+                    <div href="/QR" class="btn btn-lg btn-outline-primary rounded-pill py-3" style="font-size: 0.88rem;"><img src="~/images/qr-code-icon.png" alt="QR code icon" class="me-2" width="24">Choose image</div>
                 </a>
                 </div>
                 <div class="d-flex justify-content-center mt-2">
@@ -22,9 +22,7 @@
             </div>
 
             <div class="d-flex mt-4">
-                <a type="button" href="/" id="back" class="btn btn-secondary w-25">Back</a>
-                <div id="proceedDiv" class="d-flex w-100 d-flex d-none">
-                    <div class="w-100"></div>
+                <div id="proceedDiv" class="d-flex w-100 d-flex justify-content-center d-none">
                     <button id="proceed" class="btn btn-primary w-50">Proceed</button>
                 </div>
                 

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using XCoreAssignment.Helpers;
 using XCoreAssignment.Models;
+using XCoreAssignment.ViewModels.Utility;
 using ZXing;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -277,13 +278,30 @@ namespace XCoreAssignment.Controllers
         [HttpPost]
         public IActionResult Index(IFormFile FormFile)
         {
-            var barcodeReader = new BarcodeReader();
-            using var stream = FormFile.OpenReadStream();
-            var bitmap = (Bitmap)Image.FromStream(stream);
-            var result = barcodeReader.Decode(bitmap);
-            var resultText = result.Text;
+            string resultText;
+            try
+            {
 
-            var paymentInfo = ParsePaymentInfo(resultText);
+                var barcodeReader = new BarcodeReader();
+                using var stream = FormFile.OpenReadStream();
+                var bitmap = (Bitmap)Image.FromStream(stream);
+                var result = barcodeReader.Decode(bitmap);
+                resultText = result.Text;
+            }catch(Exception ex)
+            {
+                return View("Exception", "Error reading QR code.");
+            }
+
+            if (string.IsNullOrWhiteSpace(resultText))
+                return View("Exception", "Content of QR code is empty.");
+
+            PaymentInfo paymentInfo;
+            try
+            {
+                paymentInfo = ParsePaymentInfo(resultText);
+            }catch (Exception ex) {
+                return View("Exception", ex.Message);
+            }
 
             /*
              NOTE:
@@ -305,16 +323,11 @@ namespace XCoreAssignment.Controllers
             Maybe I should have made all letters lowercase except the first one of each word.
              */
 
-            if (result != null)
-            {
-                return Ok(result.Text);
-            }
-            else
-            {
-                return BadRequest("QR code not found");
-            }
+            UtilityTemplateVM vm = new(paymentInfo);
 
+            return RedirectToAction("Template", "Utility",vm);
         }
+
     }
 }
 

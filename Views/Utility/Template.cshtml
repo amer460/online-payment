@@ -1,5 +1,4 @@
 ﻿@model XCoreAssignment.ViewModels.Utility.UtilityTemplateVM
-@using XCoreAssignment.DummyData;
 
 <style>
     input::-webkit-outer-spin-button,
@@ -14,79 +13,146 @@
     }
 </style>
 
-<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
-    <div class="card p-5 shadow-lg rounded-3 animate__animated animate__fadeInUp" style="max-width: 750px;width:470px">
-        <h1 class="fw-bold text-center mb-4" style="font-family: 'Montserrat', sans-serif; font-size: 2rem;">Template</h1>
-        <div class="d-grid gap-3">
+<form method="post" asp-action="Pay">
+    <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div class="card p-5 shadow-lg rounded-3 animate__animated animate__fadeInUp" style="max-width: 1200px;width:1180px">
+            <h1 class="fw-bold text-center mb-4" style="font-family: 'Montserrat', sans-serif; font-size: 2rem;">Send money</h1>
+            <br />
+            <div class="d-flex justify-content-center gap-5">
+                <div class="w-100 d-grid gap-3">
 
-            <div class="form-floating">
-                <select class="form-select" id="account">
-                    <option value="0">--- Choose ---</option>
-                    @foreach (var acc in Accounts.DummyAccounts)
-                    {
-                        <option value="@acc.Id">@acc.Account</option>
-                    }
-                </select>
-                <label for="account">Account</label>
+                    <h4><b><center>Sender</center></b></h4>
+
+                    <div class="form-floating">
+                        <select asp-for="DebtorAccountId" class="form-select" placeholder="Account">
+                            <option value="0">--- Choose ---</option>
+                            @foreach (var acc in Model.DebtorAccounts)
+                            {
+                                <option value="@acc.Id">@acc.Account</option>
+                            }
+                        </select>
+                        <label asp-for="DebtorAccountId"></label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="DebtorName" placeholder="Name">
+                        <label asp-for="DebtorName"></label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="DebtorAddressLine" placeholder="Address line">
+                        <label asp-for="DebtorAddressLine"></label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="DebtorCity" placeholder="City">
+                        <label asp-for="DebtorCity"></label>
+                    </div>
+
+
+
+
+                </div>
+
+                <div class="w-100 d-grid gap-3">
+                    <h4><b><center>Amount</center></b></h4>
+
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="Amount" placeholder="Amount">
+                        <label asp-for="Amount"></label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="CurrencyCode" placeholder="Currency code">
+                        <label asp-for="CurrencyCode"></label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="PurposeCode" placeholder="Purpose code">
+                        <label asp-for="PurposeCode"></label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="PaymentDescription" placeholder="Payment description">
+                        <label asp-for="PaymentDescription"></label>
+                    </div>
+
+                </div>
+
+                <div class="w-100 d-grid gap-3">
+                    <h4><b><center>Receiver</center></b></h4>
+
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="CreditorAccount" placeholder="Account">
+                        <label asp-for="CreditorAccount"></label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="CreditorName" placeholder="Name">
+                        <label asp-for="CreditorName"></label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="CreditorAddressLine" placeholder="Address line">
+                        <label asp-for="CreditorAddressLine"></label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="CreditorCity" placeholder="City">
+                        <label asp-for="CreditorCity"></label>
+                    </div>
+
+
+
+                </div>
+
+                <div class="w-100 d-flex flex-column gap-3">
+                    <h4><b><center>Reference</center></b></h4>
+
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="CreditorReference" placeholder="Reference">
+                        <label asp-for="CreditorReference"></label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="CreditorReferenceModel" placeholder="Reference model">
+                        <label asp-for="CreditorReferenceModel"></label>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-floating">
-                <input type="number" class="form-control" id="amount" placeholder="Amount">
-                <label for="amount">Amount</label>
+            <div class="d-flex justify-content-center mt-4 gap-5">
+                <div class="w-100"></div>
+                <div class="w-100"></div>
+                <div class="w-100"></div>
+                <button id="proceed" class="btn btn-primary w-100">Proceed</button>
             </div>
 
-            <div class="form-floating">
-                <input type="number" class="form-control" id="invoiceNumber" placeholder="Invoice number">
-                <label for="invoiceNumber">Invoice number</label>
-            </div>
-
-            <hr />
-
-            <div class="form-floating">
-                <input type="text" class="form-control" id="billersName" placeholder="Biller's name">
-                <label for="billersName">Biller's name</label>
-            </div>
-
-            <div class="form-floating">
-                <input type="text" class="form-control" id="billersAddress" placeholder="Biller's address">
-                <label for="billersAddress">Biller's address</label>
-            </div>
-            <div class="form-floating">
-                <input type="number" class="form-control" id="billersBankAccountNumber" placeholder="Biller's bank account number">
-                <label for="billersBankAccountNumber">Biller's bank account number</label>
-            </div>
-
-
-            <div class="d-flex">
-                <button id="back" class="float-end btn btn-secondary w-25">Back</button>
-                <div class="w-50"></div>
-                <button id="proceed" class="float-end btn btn-primary w-25">Proceed</button>
-            </div>
         </div>
     </div>
-</div>
+</form>
 
 @section Scripts{
     <script>
 
-        function CheckIfAnyFieldPopulated() {
-            const nonEmptyFields = $('.form-control').filter(function () {
-                return $(this).val().trim() !== '';
-            }).length;
-
-            return nonEmptyFields > 0;
-        }
-
-        $('#back').click(function () {
-
-            const isAnyFieldPopulated = CheckIfAnyFieldPopulated();
-
-            if (isAnyFieldPopulated) {
-                showModal('Warning', 'Message',"warning")
-                return;
-            }
-
-            location.href = '/';
-        })
+        //function CheckIfAnyFieldPopulated() {
+        //    const nonEmptyFields = $('.form-control').filter(function () {
+        //        return $(this).val().trim() !== '';
+        //    }).length;
+        //
+        //    return nonEmptyFields > 0;
+        //}
+        //
+        //$('#back').click(function () {
+        //
+        //    const isAnyFieldPopulated = CheckIfAnyFieldPopulated();
+        //
+        //    if (isAnyFieldPopulated) {
+        //        showModal('Warning', 'Message',"warning")
+        //        return;
+        //    }
+        //
+        //    location.href = '/';
+        //})
     </script>
 }
