@@ -19,19 +19,17 @@ namespace XCoreAssignment.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
-        [HttpGet]
-        public IActionResult Template(UtilityTemplateVM? vm = null)
+        public IActionResult Template()
         {
-            vm ??= new();
-
+            var vm = new UtilityTemplateVM();
             return View(vm);
         }
 
         [HttpPost]
         public async Task<IActionResult> Pay(UtilityTemplateVM vm)
         {
-            if(!ModelState.IsValid)
-                return View("Template",vm);
+            if (!ModelState.IsValid)
+                return View("Template", vm);
 
             StringBuilder errorMessage = new();
 
@@ -43,7 +41,7 @@ namespace XCoreAssignment.Controllers
             if (!double.TryParse(maximumSendingAmountStr, NumberStyles.Currency, CultureInfo.InvariantCulture, out var maximumSendingAmount))
                 errorMessage.AppendLine("Maximum sending amount not defined or not set correctly.");
 
-            if(errorMessage.Length > 0)
+            if (errorMessage.Length > 0)
             {
                 vm.ErrorMessage = errorMessage.ToString();
                 return View(vm);
@@ -56,21 +54,36 @@ namespace XCoreAssignment.Controllers
             if (amount > maximumSendingAmount)
                 errorMessage.AppendLine($"Sending amount is higher than defined maximum amount. ({maximumSendingAmount})");
 
-            if(errorMessage.Length > 0)
+            if (errorMessage.Length > 0)
             {
                 return View("Suprice");
             }
 
+            var successAPIUrl = _configuration.GetValue<string>("SuccessAPIUrl");
+            if (string.IsNullOrWhiteSpace(successAPIUrl))
+                return View("Exception", "API url is null or empty");
+
+
             var httpClient = _httpClientFactory.CreateClient();
-            var response = await httpClient.GetAsync("https://v2.jokeapi.dev/joke/Any");
+            var response = await httpClient.GetAsync(successAPIUrl);
 
             if (!response.IsSuccessStatusCode)
-                return View("Exception", "Error calling API -> https://v2.jokeapi.dev/joke/Any");
+                return View("Exception", $"Error calling API -> {successAPIUrl}");
 
             var responseJSON = await response.Content.ReadAsStringAsync();
-            var joke = JsonConvert.DeserializeObject<JokeDTO>(responseJSON);
+            JokeDTO? joke;
 
-            return View("Joke",joke);
+            try
+            {
+                joke = JsonConvert.DeserializeObject<JokeDTO>(responseJSON);
+                joke ??= new();
+            }
+            catch (Exception)
+            {
+                return View("Exception", "Error parsing joke response");
+            }
+
+            return View("Joke", joke);
         }
     }
 }

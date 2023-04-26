@@ -13,11 +13,12 @@
     }
 </style>
 
-<form method="post" asp-action="Pay">
+<form method="post" asp-action="Pay" asp-controller="Utility">
     <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="card p-4 shadow-lg rounded-3 animate__animated animate__fadeInUp" style="max-width: 1200px;width:1180px">
             <h1 class="fw-bold text-center mb-4" style="font-family: 'Montserrat', sans-serif; font-size: 2rem;">Send money</h1>
             <br />
+
             <div class="d-flex justify-content-center gap-5">
                 <div class="w-100 d-grid gap-3">
 
@@ -25,28 +26,32 @@
 
                     <div class="form-floating">
                         <select asp-for="DebtorAccountId" class="form-select" placeholder="Account">
-                            <option value="0">--- Choose ---</option>
+                            <option value="null">--- Choose ---</option>
                             @foreach (var acc in Model.DebtorAccounts)
                             {
-                                <option value="@acc.Id">@acc.Account</option>
+                                    <option value="@acc.Id">@acc.Account</option>
                             }
                         </select>
                         <label asp-for="DebtorAccountId"></label>
+                        <span class="text-danger" asp-validation-for="DebtorAccountId"></span>
                     </div>
 
                     <div class="form-floating">
                         <input class="form-control" asp-for="DebtorName" placeholder="Name">
                         <label asp-for="DebtorName"></label>
+                        <span class="text-danger" asp-validation-for="DebtorName"></span>
                     </div>
 
                     <div class="form-floating">
                         <input class="form-control" asp-for="DebtorAddressLine" placeholder="Address line">
                         <label asp-for="DebtorAddressLine"></label>
+                        <span class="text-danger" asp-validation-for="DebtorAddressLine"></span>
                     </div>
 
                     <div class="form-floating">
                         <input class="form-control" asp-for="DebtorCity" placeholder="City">
                         <label asp-for="DebtorCity"></label>
+                        <span class="text-danger" asp-validation-for="DebtorCity"></span>
                     </div>
 
 
@@ -60,21 +65,25 @@
                     <div class="form-floating">
                         <input class="form-control" asp-for="Amount" placeholder="Amount">
                         <label asp-for="Amount"></label>
+                        <span class="text-danger" asp-validation-for="Amount"></span>
                     </div>
 
                     <div class="form-floating">
                         <input class="form-control" asp-for="CurrencyCode" placeholder="Currency code">
                         <label asp-for="CurrencyCode"></label>
+                        <span class="text-danger" asp-validation-for="CurrencyCode"></span>
                     </div>
 
                     <div class="form-floating">
                         <input class="form-control" asp-for="PurposeCode" placeholder="Purpose code">
                         <label asp-for="PurposeCode"></label>
+                        <span class="text-danger" asp-validation-for="PurposeCode"></span>
                     </div>
 
                     <div class="form-floating">
                         <input class="form-control" asp-for="PaymentDescription" placeholder="Payment description">
                         <label asp-for="PaymentDescription"></label>
+                        <span class="text-danger" asp-validation-for="PaymentDescription"></span>
                     </div>
 
                 </div>
@@ -85,21 +94,25 @@
                     <div class="form-floating">
                         <input class="form-control" asp-for="CreditorAccount" placeholder="Account">
                         <label asp-for="CreditorAccount"></label>
+                        <span class="text-danger" asp-validation-for="CreditorAccount"></span>
                     </div>
 
                     <div class="form-floating">
                         <input class="form-control" asp-for="CreditorName" placeholder="Name">
                         <label asp-for="CreditorName"></label>
+                        <span class="text-danger" asp-validation-for="CreditorName"></span>
                     </div>
 
                     <div class="form-floating">
                         <input class="form-control" asp-for="CreditorAddressLine" placeholder="Address line">
                         <label asp-for="CreditorAddressLine"></label>
+                        <span class="text-danger" asp-validation-for="CreditorAddressLine"></span>
                     </div>
 
                     <div class="form-floating">
                         <input class="form-control" asp-for="CreditorCity" placeholder="City">
                         <label asp-for="CreditorCity"></label>
+                        <span class="text-danger" asp-validation-for="CreditorCity"></span>
                     </div>
 
 
@@ -112,11 +125,13 @@
                     <div class="form-floating">
                         <input class="form-control" asp-for="CreditorReference" placeholder="Reference">
                         <label asp-for="CreditorReference"></label>
+                        <span class="text-danger" asp-validation-for="CreditorReference"></span>
                     </div>
 
                     <div class="form-floating">
                         <input class="form-control" asp-for="CreditorReferenceModel" placeholder="Reference model">
                         <label asp-for="CreditorReferenceModel"></label>
+                        <span class="text-danger" asp-validation-for="CreditorReferenceModel"></span>
                     </div>
                 </div>
             </div>
@@ -131,28 +146,3 @@
         </div>
     </div>
 </form>
-
-@section Scripts{
-    <script>
-
-        //function CheckIfAnyFieldPopulated() {
-        //    const nonEmptyFields = $('.form-control').filter(function () {
-        //        return $(this).val().trim() !== '';
-        //    }).length;
-        //
-        //    return nonEmptyFields > 0;
-        //}
-        //
-        //$('#back').click(function () {
-        //
-        //    const isAnyFieldPopulated = CheckIfAnyFieldPopulated();
-        //
-        //    if (isAnyFieldPopulated) {
-        //        showModal('Warning', 'Message',"warning")
-        //        return;
-        //    }
-        //
-        //    location.href = '/';
-        //})
-    </script>
-}

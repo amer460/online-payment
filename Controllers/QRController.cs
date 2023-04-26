@@ -325,7 +325,7 @@ namespace XCoreAssignment.Controllers
 
             UtilityTemplateVM vm = new(paymentInfo);
 
-            return RedirectToAction("Template", "Utility",vm);
+            return View("~/Views/Utility/Template.cshtml", vm);
         }
 
     }
