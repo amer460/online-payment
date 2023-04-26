@@ -1,0 +1,92 @@
+﻿@model XCoreAssignment.ViewModels.Utility.UtilityTemplateVM
+@using XCoreAssignment.DummyData;
+
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
+
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="card p-5 shadow-lg rounded-3 animate__animated animate__fadeInUp" style="max-width: 750px;width:470px">
+        <h1 class="fw-bold text-center mb-4" style="font-family: 'Montserrat', sans-serif; font-size: 2rem;">Template</h1>
+        <div class="d-grid gap-3">
+
+            <div class="form-floating">
+                <select class="form-select" id="account">
+                    <option value="0">--- Choose ---</option>
+                    @foreach (var acc in Accounts.DummyAccounts)
+                    {
+                        <option value="@acc.Id">@acc.Account</option>
+                    }
+                </select>
+                <label for="account">Account</label>
+            </div>
+
+            <div class="form-floating">
+                <input type="number" class="form-control" id="amount" placeholder="Amount">
+                <label for="amount">Amount</label>
+            </div>
+
+            <div class="form-floating">
+                <input type="number" class="form-control" id="invoiceNumber" placeholder="Invoice number">
+                <label for="invoiceNumber">Invoice number</label>
+            </div>
+
+            <hr />
+
+            <div class="form-floating">
+                <input type="text" class="form-control" id="billersName" placeholder="Biller's name">
+                <label for="billersName">Biller's name</label>
+            </div>
+
+            <div class="form-floating">
+                <input type="text" class="form-control" id="billersAddress" placeholder="Biller's address">
+                <label for="billersAddress">Biller's address</label>
+            </div>
+            <div class="form-floating">
+                <input type="number" class="form-control" id="billersBankAccountNumber" placeholder="Biller's bank account number">
+                <label for="billersBankAccountNumber">Biller's bank account number</label>
+            </div>
+
+
+            <div class="d-flex">
+                <button id="back" class="float-end btn btn-secondary w-25">Back</button>
+                <div class="w-50"></div>
+                <button id="proceed" class="float-end btn btn-primary w-25">Proceed</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+        function CheckIfAnyFieldPopulated() {
+            const nonEmptyFields = $('.form-control').filter(function () {
+                return $(this).val().trim() !== '';
+            }).length;
+
+            return nonEmptyFields > 0;
+        }
+
+        $('#back').click(function () {
+
+            const isAnyFieldPopulated = CheckIfAnyFieldPopulated();
+
+            if (isAnyFieldPopulated) {
+                showModal('Warning', 'Message',"warning")
+                return;
+            }
+
+            location.href = '/';
+        })
+    </script>
+}
