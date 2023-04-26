@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Globalization;
 using System.Text;
+using System.Text.Json;
+using XCoreAssignment.Models;
 using XCoreAssignment.ViewModels.Utility;
 
 namespace XCoreAssignment.Controllers
@@ -25,7 +28,7 @@ namespace XCoreAssignment.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PayAsync(UtilityTemplateVM vm)
+        public async Task<IActionResult> Pay(UtilityTemplateVM vm)
         {
             if(!ModelState.IsValid)
                 return View("Template",vm);
@@ -55,8 +58,7 @@ namespace XCoreAssignment.Controllers
 
             if(errorMessage.Length > 0)
             {
-                vm.ErrorMessage = errorMessage.ToString();
-                return View(vm);
+                return View("Suprice");
             }
 
             var httpClient = _httpClientFactory.CreateClient();
@@ -66,9 +68,9 @@ namespace XCoreAssignment.Controllers
                 return View("Exception", "Error calling API -> https://v2.jokeapi.dev/joke/Any");
 
             var responseJSON = await response.Content.ReadAsStringAsync();
-            var joke = JsonCo
+            var joke = JsonConvert.DeserializeObject<JokeDTO>(responseJSON);
 
-            return View();
+            return View("Joke",joke);
         }
     }
 }
