@@ -1,15 +1,10 @@
 ﻿using Application.Common.Interfaces;
-using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Moq;
-using NuGet.ContentModel;
 using NUnit.Framework;
 using XCoreAssignment.Controllers;
-using XCoreAssignment.DummyData;
 using XCoreAssignment.Helpers;
 using XCoreAssignment.Services;
-using XCoreAssignment.ViewModels.Utility;
 
 namespace XCoreAssignment.Tests
 {
