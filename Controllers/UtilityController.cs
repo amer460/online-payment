@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using XCoreAssignment.Models;
+﻿using Application.Common.CustomAttributes;
+using Microsoft.AspNetCore.Mvc;
 using XCoreAssignment.Services;
 using XCoreAssignment.ViewModels.Utility;
 
@@ -7,9 +7,9 @@ namespace XCoreAssignment.Controllers;
 
 public class UtilityController : Controller
 {
-    private readonly IUtilityService _utilityService;
+    private readonly IUtilityControllerService _utilityService;
 
-    public UtilityController(IUtilityService utilityService)
+    public UtilityController(IUtilityControllerService utilityService)
     {
         _utilityService = utilityService;
     }

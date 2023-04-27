@@ -1,4 +1,4 @@
-﻿namespace XCoreAssignment.Models;
+﻿namespace XCoreAssignment.DTOs;
 
 public class JokeDTO
 {

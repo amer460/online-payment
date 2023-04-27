@@ -5,9 +5,9 @@ namespace XCoreAssignment.Controllers;
 
 public class QRController : Controller
 {
-    private readonly IQRService _qrService;
+    private readonly IQRControllerService _qrService;
 
-    public QRController(IQRService qrService)
+    public QRController(IQRControllerService qrService)
     {
         _qrService = qrService;
     }

@@ -1,6 +1,7 @@
 using Application.Common.Exceptions;
 using XCoreAssignment.Services;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,9 +10,7 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add(new ModelStateExceptionFilter());
 }); builder.Services.AddHttpClient();
 
-builder.Services.AddScoped<IUtilityService, UtilityService>();
-builder.Services.AddScoped<IQRService, QRService>();
-
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 

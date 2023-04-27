@@ -1,25 +1,25 @@
 ﻿using Newtonsoft.Json;
 using System.Globalization;
 using System.Text;
+using XCoreAssignment.DTOs;
 using XCoreAssignment.Helpers;
-using XCoreAssignment.Models;
 using XCoreAssignment.ViewModels.Utility;
 
 namespace XCoreAssignment.Services;
 
-public interface IUtilityService
+public interface IUtilityControllerService
 {
     Task<ViewResultDTO> TemplatePostAsync(UtilityTemplateVM vm);
     ViewResultDTO TemplateGet();
 }
 
-public class UtilityService : IUtilityService
+public class UtilityControllerService : IUtilityControllerService
 {
     private readonly IConfiguration _configuration;
     private readonly IHttpClientFactory _httpClientFactory;
 
 
-    public UtilityService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
+    public UtilityControllerService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
     {
         _configuration = configuration;
         _httpClientFactory = httpClientFactory;
@@ -47,7 +47,7 @@ public class UtilityService : IUtilityService
         if (errorMessage.Length > 0)
         {
             vm.ErrorMessage = errorMessage.ToString();
-            return new ViewResultDTO("Pay", vm);
+            return new ViewResultDTO("Template", vm);
         }
 
         double amount = double.Parse(vm.Amount, NumberStyles.Number, CultureInfo.GetCultureInfo("en-US"));

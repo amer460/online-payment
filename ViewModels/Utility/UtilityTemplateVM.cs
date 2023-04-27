@@ -1,8 +1,6 @@
-﻿using Application;
+﻿using Application.Common.Validations;
 using Domain.Entities;
 using System.ComponentModel.DataAnnotations;
-using XCoreAssignment.Models;
-using XCoreAssignment.Validations;
 
 namespace XCoreAssignment.ViewModels.Utility;
 
@@ -33,7 +31,7 @@ public class UtilityTemplateVM
     [Required]
     public int? DebtorAccountId { get; set; }
 
-    public List<AccountDTO> DebtorAccounts  = DummyData.Accounts.DummyAccounts;
+    public List<Account> DebtorAccounts  = DummyData.Accounts.DummyAccounts;
 
 
     [Display(Name = "Name")]
