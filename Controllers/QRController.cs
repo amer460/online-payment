@@ -186,7 +186,7 @@ namespace XCoreAssignment.Controllers
 
             string amountFormated = string.Format("{0:n2}", amount);
 
-            return new CurrencyAmountDTO(currencyCode.Number.ToString(), amountFormated);
+            return new CurrencyAmountDTO(currencyCode.Code, amountFormated);
 
         }
 

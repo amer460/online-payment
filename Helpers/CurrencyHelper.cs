@@ -174,6 +174,9 @@
         };
         public static Iso4217Definition LookupByCode(string code)
         {
+            if (string.IsNullOrWhiteSpace(code))
+                return _notFoundDefinition;
+
             dynamic def = _definitionCollection.Where(d => d.Code == code.ToUpper()).SingleOrDefault();
             if (def == null)
                 def = _notFoundDefinition;

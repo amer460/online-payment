@@ -4,86 +4,32 @@ using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using XCoreAssignment.Models;
+using XCoreAssignment.Services;
 using XCoreAssignment.ViewModels.Utility;
 
 namespace XCoreAssignment.Controllers
 {
     public class UtilityController : Controller
     {
-        private readonly IConfiguration _configuration;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IUtilityService _utilityService;
 
-        public UtilityController(IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public UtilityController(IUtilityService utilityService)
         {
-            _configuration = configuration;
-            _httpClientFactory = httpClientFactory;
+            _utilityService = utilityService;
         }
 
         public IActionResult Template()
         {
-            var vm = new UtilityTemplateVM();
-            return View(vm);
+            var viewResult = _utilityService.Template();
+            return View(viewResult.View,viewResult.Model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Pay(UtilityTemplateVM vm)
+        [CheckModelState]
+        public async Task<IActionResult> Template(UtilityTemplateVM vm)
         {
-            if (!ModelState.IsValid)
-                return View("Template", vm);
-
-            StringBuilder errorMessage = new();
-
-            var minimumSendingAmountStr = _configuration.GetValue<string>("MinimumSendingAmount");
-            if (!double.TryParse(minimumSendingAmountStr, NumberStyles.Currency, CultureInfo.InvariantCulture, out var minimumSendingAmount))
-                errorMessage.AppendLine("Minimum sending amount not defined or not set correctly.");
-
-            var maximumSendingAmountStr = _configuration.GetValue<string>("MaximumSendingAmount");
-            if (!double.TryParse(maximumSendingAmountStr, NumberStyles.Currency, CultureInfo.InvariantCulture, out var maximumSendingAmount))
-                errorMessage.AppendLine("Maximum sending amount not defined or not set correctly.");
-
-            if (errorMessage.Length > 0)
-            {
-                vm.ErrorMessage = errorMessage.ToString();
-                return View(vm);
-            }
-
-            double amount = double.Parse(vm.Amount, NumberStyles.Number, CultureInfo.GetCultureInfo("en-US"));
-            if (amount < minimumSendingAmount)
-                errorMessage.AppendLine($"Sending amount is lower than defined minimum amount. ({minimumSendingAmount})");
-
-            if (amount > maximumSendingAmount)
-                errorMessage.AppendLine($"Sending amount is higher than defined maximum amount. ({maximumSendingAmount})");
-
-            if (errorMessage.Length > 0)
-            {
-                return View("Suprice");
-            }
-
-            var successAPIUrl = _configuration.GetValue<string>("SuccessAPIUrl");
-            if (string.IsNullOrWhiteSpace(successAPIUrl))
-                return View("Exception", "API url is null or empty");
-
-
-            var httpClient = _httpClientFactory.CreateClient();
-            var response = await httpClient.GetAsync(successAPIUrl);
-
-            if (!response.IsSuccessStatusCode)
-                return View("Exception", $"Error calling API -> {successAPIUrl}");
-
-            var responseJSON = await response.Content.ReadAsStringAsync();
-            JokeDTO? joke;
-
-            try
-            {
-                joke = JsonConvert.DeserializeObject<JokeDTO>(responseJSON);
-                joke ??= new();
-            }
-            catch (Exception)
-            {
-                return View("Exception", "Error parsing joke response");
-            }
-
-            return View("Joke", joke);
+            var viewResult = await _utilityService.PayAsync(vm);
+            return View(viewResult.View, viewResult.Model);
         }
     }
 }

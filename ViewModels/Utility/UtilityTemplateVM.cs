@@ -1,7 +1,9 @@
 ﻿using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using XCoreAssignment.Helpers;
 using XCoreAssignment.Models;
+using XCoreAssignment.Validations;
 
 namespace XCoreAssignment.ViewModels.Utility
 {
@@ -78,6 +80,7 @@ namespace XCoreAssignment.ViewModels.Utility
 
         [Display(Name = "Currency code")]
         [Required]
+        [CustomValidation(typeof(CurrencyCodeValidation), "ValidateCurrencyCode")]
         public string? CurrencyCode { get; set; }
 
         [Display(Name = "Account")]
