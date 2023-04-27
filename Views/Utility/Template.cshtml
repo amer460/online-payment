@@ -28,9 +28,9 @@
                         <select asp-for="DebtorAccountId" class="form-select" placeholder="Account">
                             <option value="null">--- Choose ---</option>
                             @foreach (var acc in Model.DebtorAccounts)
-                            {
-                                    <option value="@acc.Id">@acc.Account</option>
-                            }
+                        {
+                                <option value="@acc.Id">@acc.Account</option>
+                        }
                         </select>
                         <label asp-for="DebtorAccountId"></label>
                         <span class="text-danger" asp-validation-for="DebtorAccountId"></span>

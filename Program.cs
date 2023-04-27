@@ -1,4 +1,4 @@
-using XCoreAssignment.Exceptions;
+using Application.Common.Exceptions;
 using XCoreAssignment.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +10,7 @@ builder.Services.AddControllersWithViews(options =>
 }); builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IUtilityService, UtilityService>();
+builder.Services.AddScoped<IQRService, QRService>();
 
 
 var app = builder.Build();

@@ -1,22 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
-using XCoreAssignment.Helpers;
+﻿using Application.HelperModels;
+using System.ComponentModel.DataAnnotations;
 
-namespace XCoreAssignment.Validations
+namespace XCoreAssignment.Validations;
+
+public class CurrencyCodeValidation
 {
-    public class CurrencyCodeValidation
+    public static ValidationResult ValidateCurrencyCode(string currencyCode, ValidationContext context)
     {
-        public static ValidationResult ValidateCurrencyCode(string currencyCode, ValidationContext context)
-        {
-            var currency = CurrencyHelper.LookupByCode(currencyCode);
+        var currency = CurrencyHelper.LookupByCode(currencyCode);
 
-            if (currency.Code != "NotFound")
-            {
-                return ValidationResult.Success;
-            }
-            else
-            {
-                return new ValidationResult($"{currencyCode} is invalid currency code (try EUR, USD, JPY...)");
-            }
+        if (currency.Code != "NotFound")
+        {
+            return ValidationResult.Success;
+        }
+        else
+        {
+            return new ValidationResult($"{currencyCode} is invalid currency code (try EUR, USD, JPY...)");
         }
     }
 }
