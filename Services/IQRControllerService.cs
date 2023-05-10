@@ -1,14 +1,16 @@
-﻿using XCoreAssignment.Helpers;
-using XCoreAssignment.ViewModels.Utility;
+﻿using Application.Common.Interfaces;
+using Application.HelperModels;
 using Domain.Entities;
-using Application.Common.Interfaces;
+using System.Drawing;
+using XCoreAssignment.ViewModels.Utility;
+using ZXing;
 
 namespace XCoreAssignment.Services;
 
 public interface IQRControllerService
 {
-    ViewResultDTO IndexGet();
-    ViewResultDTO IndexPost(IFormFile FormFile);
+    ViewResultHelper IndexGet();
+    ViewResultHelper IndexPost(IFormFile qrCodeImage);
 }
 
 public class QRControllerService : IQRControllerService
@@ -22,37 +24,30 @@ public class QRControllerService : IQRControllerService
         _paymentService = paymentService;
     }
 
-    public ViewResultDTO IndexGet()
+    public ViewResultHelper IndexGet()
     {
-        return new ViewResultDTO("Index");
+        return new ViewResultHelper("Index");
     }
 
-    public ViewResultDTO IndexPost(IFormFile FormFile)
+    public ViewResultHelper IndexPost(IFormFile? qrCodeImage)
     {
-        if(FormFile == null)
-            return new ViewResultDTO("Exception", "Image not specified.");
-
-        string qrCodeText;
+        string? qrCodeText = null;
         try
         {
-            qrCodeText = _qrService.ReadImage(FormFile);
-        }
-        catch (Exception)
+            qrCodeText = _qrService.ReadImage(qrCodeImage);
+        }catch (Exception ex)
         {
-            return new ViewResultDTO("Exception", "Error reading QR code.");
+            return new ViewResultHelper("Exception", ex.Message);
         }
-
-        if (string.IsNullOrWhiteSpace(qrCodeText))
-            return new ViewResultDTO("Exception", "Content of QR code is empty.");
 
         PaymentInfo paymentInfo;
         try
         {
-            paymentInfo = _paymentService.GetPaymentInfo(qrCodeText);
+            paymentInfo = _paymentService.Parse(qrCodeText);
         }
         catch (Exception ex)
         {
-            return new ViewResultDTO("Exception", ex.Message);
+            return new ViewResultHelper("Exception", ex.Message);
         }
 
         /*
@@ -73,15 +68,10 @@ public class QRControllerService : IQRControllerService
 
         another difference is "John Do" and "JOHN DO"
         Maybe I should have made all letters lowercase except the first one of each word.
-
-        I made it so that sender name, address line and city are always the same.
-        They are being proccessed on QR code load but I am not changing or validating user's personal information.
-
          */
 
         UtilityTemplateVM vm = new(paymentInfo);
 
-        return new ViewResultDTO("~/Views/Utility/Template.cshtml", vm);
+        return new ViewResultHelper("~/Views/Utility/Template.cshtml", vm);
     }
-
 }

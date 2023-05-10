@@ -1,4 +1,4 @@
-﻿namespace XCoreAssignment.DTOs;
+﻿namespace Application.Utility;
 
 public class JokeDTO
 {

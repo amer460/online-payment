@@ -29,7 +29,7 @@
                             <option value="null">--- Choose ---</option>
                             @foreach (var acc in Model.DebtorAccounts)
                         {
-                                <option value="@acc.Id">@acc.AccountNumber</option>
+                                <option value="@acc.Id">@acc.Account</option>
                         }
                         </select>
                         <label asp-for="DebtorAccountId"></label>

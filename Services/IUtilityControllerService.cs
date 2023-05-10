@@ -1,16 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using Application.HelperModels;
+using Application.Utility;
+using Newtonsoft.Json;
 using System.Globalization;
 using System.Text;
-using XCoreAssignment.DTOs;
-using XCoreAssignment.Helpers;
 using XCoreAssignment.ViewModels.Utility;
 
 namespace XCoreAssignment.Services;
 
 public interface IUtilityControllerService
 {
-    Task<ViewResultDTO> TemplatePostAsync(UtilityTemplateVM vm);
-    ViewResultDTO TemplateGet();
+    Task<ViewResultHelper> TemplatePostAsync(UtilityTemplateVM vm);
+    ViewResultHelper TemplateGet();
 }
 
 public class UtilityControllerService : IUtilityControllerService
@@ -25,13 +25,13 @@ public class UtilityControllerService : IUtilityControllerService
         _httpClientFactory = httpClientFactory;
     }
 
-    public ViewResultDTO TemplateGet()
+    public ViewResultHelper TemplateGet()
     {
         var vm = new UtilityTemplateVM();
-        return new ViewResultDTO("Template", vm);
+        return new ViewResultHelper("Template", vm);
     }
 
-    public async Task<ViewResultDTO> TemplatePostAsync(UtilityTemplateVM vm)
+    public async Task<ViewResultHelper> TemplatePostAsync(UtilityTemplateVM vm)
     {
 
         StringBuilder errorMessage = new();
@@ -47,7 +47,7 @@ public class UtilityControllerService : IUtilityControllerService
         if (errorMessage.Length > 0)
         {
             vm.ErrorMessage = errorMessage.ToString();
-            return new ViewResultDTO("Template", vm);
+            return new ViewResultHelper("Template", vm);
         }
 
         double amount = double.Parse(vm.Amount, NumberStyles.Number, CultureInfo.GetCultureInfo("en-US"));
@@ -59,34 +59,42 @@ public class UtilityControllerService : IUtilityControllerService
 
         if (errorMessage.Length > 0)
         {
-            return new ViewResultDTO("Suprice");
+            return new ViewResultHelper("Suprice");
         }
 
         var successAPIUrl = _configuration.GetValue<string>("SuccessAPIUrl");
         if (string.IsNullOrWhiteSpace(successAPIUrl))
-            return new ViewResultDTO("Exception", "API url is null or empty");
+            return new ViewResultHelper("Exception", "API url is null or empty");
 
         var httpClient = _httpClientFactory.CreateClient();
-        var response = await httpClient.GetAsync(successAPIUrl);
+        HttpResponseMessage response = await httpClient.GetAsync(successAPIUrl);
+
+        //if it returns null on the setup, try multiple times
+        JokeDTO? joke = null;
+        for (int i = 0; i < 3; i++)
+        {
+            var responseJSON = await response.Content.ReadAsStringAsync();
+
+            try
+            {
+                joke = JsonConvert.DeserializeObject<JokeDTO>(responseJSON);
+                joke ??= new();
+            }
+            catch (Exception)
+            {
+                return new ViewResultHelper("Exception", "Error parsing joke response");
+
+            }
+
+            if (!string.IsNullOrWhiteSpace(joke.Setup))
+                break;
+
+            await Task.Delay(500);
+        }
 
         if (!response.IsSuccessStatusCode)
-            return new ViewResultDTO("Exception", $"Error calling API -> {successAPIUrl}");
+            return new ViewResultHelper("Exception", $"Error calling API -> {successAPIUrl}");
 
-
-        var responseJSON = await response.Content.ReadAsStringAsync();
-        JokeDTO? joke;
-
-        try
-        {
-            joke = JsonConvert.DeserializeObject<JokeDTO>(responseJSON);
-            joke ??= new();
-        }
-        catch (Exception)
-        {
-            return new ViewResultDTO("Exception", "Error parsing joke response");
-
-        }
-
-        return new ViewResultDTO("Joke", joke);
+        return new ViewResultHelper("Joke", joke);
     }
 }

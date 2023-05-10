@@ -7,11 +7,33 @@
     <UserSecretsId>eef2e22f-2529-4d82-b0fb-b98cc810681d</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
+	  <NoWarn>NU1701</NoWarn>
+
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Projects\**" />
+    <Content Remove="Projects\**" />
+    <EmbeddedResource Remove="Projects\**" />
+    <None Remove="Projects\**" />
+  </ItemGroup>
+
+	
+  <ItemGroup>
+    <None Include="Views\Home\Index.cshtml" />
+    <None Include="Views\QR\Index.cshtml" />
+    <None Include="Views\Shared\Exception.cshtml" />
+    <None Include="Views\Shared\Joke.cshtml" />
+    <None Include="Views\Shared\Success.cshtml" />
+    <None Include="Views\Shared\Suprice.cshtml" />
+    <None Include="Views\Shared\_Layout.cshtml" />
+    <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <None Include="Views\Utility\Template.cshtml" />
+    <None Include="Views\_ViewImports.cshtml" />
+    <None Include="Views\_ViewStart.cshtml" />
     <None Include="wwwroot\images\cat.jpg" />
   </ItemGroup>
+	
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
@@ -24,8 +46,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include=".\Projects\Application\Application.csproj" />
+    <ProjectReference Include=".\Projects\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

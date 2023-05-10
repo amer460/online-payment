@@ -1,16 +1,14 @@
-﻿namespace XCoreAssignment.Services
+﻿namespace XCoreAssignment.Services;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
-        {
-            services.AddScoped(typeof(IUtilityControllerService), typeof(UtilityControllerService));
-            services.AddScoped(typeof(IQRControllerService), typeof(QRControllerService));
+        Infrastructure.DependencyInjection.AddInfrastructure(services);
 
-            Infrastructure.DependencyInjection.AddInfrastructure(services);
+        services.AddScoped<IQRControllerService, QRControllerService>();
+        services.AddScoped<IUtilityControllerService, UtilityControllerService>();
 
-            return services;
-        }
+        return services;
     }
-
 }

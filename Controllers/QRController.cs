@@ -5,24 +5,26 @@ namespace XCoreAssignment.Controllers;
 
 public class QRController : Controller
 {
-    private readonly IQRControllerService _qrService;
 
-    public QRController(IQRControllerService qrService)
+    private readonly IQRControllerService _qrControllerService;
+
+    public QRController(IQRControllerService qrControllerService)
     {
-        _qrService = qrService;
+        _qrControllerService = qrControllerService;
     }
 
     [HttpGet]
     public IActionResult Index()
     {
-        var viewResult = _qrService.IndexGet();
-        return View(viewResult.View, viewResult.Model);
+        var result = _qrControllerService.IndexGet();
+        return View(result.View, result.Model);
     }
 
     [HttpPost]
     public IActionResult Index(IFormFile FormFile)
     {
-        var viewResult = _qrService.IndexPost(FormFile);
-        return View(viewResult.View, viewResult.Model);
+        var result = _qrControllerService.IndexPost(FormFile);
+        return View(result.View, result.Model);
     }
+
 }

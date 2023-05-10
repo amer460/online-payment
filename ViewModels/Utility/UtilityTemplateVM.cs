@@ -1,4 +1,5 @@
 ﻿using Application.Common.Validations;
+using Application.Utility;
 using Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
@@ -31,7 +32,7 @@ public class UtilityTemplateVM
     [Required]
     public int? DebtorAccountId { get; set; }
 
-    public List<Account> DebtorAccounts  = DummyData.Accounts.DummyAccounts;
+    public List<AccountDTO> DebtorAccounts  = AccountsDummy.Accounts;
 
 
     [Display(Name = "Name")]
